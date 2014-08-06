@@ -1,29 +1,55 @@
 import re
 import sublime, sublime_plugin
 
+
 # Global variables
 search_limit = 20000
 file_size_limit = 4194304
-settings = sublime.load_settings('CursorWordHighlighter.sublime-settings')
-highlighter_enabled = bool(settings.get('cursor_word_highlighter_enabled', True))
-case_sensitive = bool(settings.get('cursor_word_highlighter_case_sensitive', True))
-draw_outline = bool(settings.get('cursor_word_highlighter_draw_outlined', True))
-color_scope = settings.get('cursor_word_highlighter_color_scope_name', 'comment')
-highlight_on_gutter = bool(settings.get('cursor_word_highlighter_mark_occurrences_on_gutter', False))
-word_separators = sublime.load_settings('Preferences.sublime-settings').get('word_separators')
+settings = {}
+word_separators = ''
+highlighter_enabled = True
+case_sensitive = True
+draw_outline = True
+color_scope = 'comment'
+highlight_on_gutter = False
 gutter_icon_type = ''
 search_flags = sublime.LITERAL
 draw_flags = sublime.DRAW_NO_FILL
 
-if highlight_on_gutter :
-    gutter_icon_type = settings.get('cursor_word_highlighter_icon_type_on_gutter', 'dot')
-if not case_sensitive :
-    search_flags = sublime.IGNORECASE
-if not draw_outline :
-    draw_flags = sublime.DRAW_NO_OUTLINE
+def get_settings():
+    global settings, highlighter_enabled, case_sensitive, draw_outline, color_scope
+    global highlight_on_gutter, gutter_icon_type, search_flags, draw_flags, word_separators
 
+    settings = sublime.load_settings('Preferences.sublime-settings')
+    word_separators = settings.get('word_separators')
+    highlighter_enabled = bool(settings.get('cursor_word_highlighter_enabled', True))
+    case_sensitive = bool(settings.get('cursor_word_highlighter_case_sensitive', True))
+    draw_outline = bool(settings.get('cursor_word_highlighter_draw_outlined', True))
+    color_scope = settings.get('cursor_word_highlighter_color_scope_name', 'comment')
+    highlight_on_gutter = bool(settings.get('cursor_word_highlighter_mark_occurrences_on_gutter', False))
+    
+    if highlight_on_gutter :
+        gutter_icon_type = settings.get('cursor_word_highlighter_icon_type_on_gutter', 'dot')
+    else:
+        gutter_icon_type = ''
+
+    if not case_sensitive :
+        search_flags = sublime.IGNORECASE
+    else:
+        search_flags = sublime.LITERAL
+
+    if not draw_outline :
+        draw_flags = sublime.DRAW_NO_OUTLINE
+    else:
+        draw_flags = sublime.DRAW_NO_FILL
+
+    return settings
+
+def plugin_loaded():
+    get_settings().add_on_change('Preferences-reload', get_settings)
 
 class CursorWordHighlighterListener(sublime_plugin.EventListener):
+
     def on_post_text_command(self, view, command_name, args):
         if not highlighter_enabled:
             view.erase_regions("CursorWordHighlighter")

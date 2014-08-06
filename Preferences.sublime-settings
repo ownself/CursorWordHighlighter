@@ -6,6 +6,6 @@
 	"cursor_word_highlighter_color_scope_name": "comment",
 	"cursor_word_highlighter_mark_occurrences_on_gutter" : false,
 	// valid types: dot, circle, bookmark and cross
-	"cursor_word_highlighter_icon_type_on_gutter" : "circle"
+	"cursor_word_highlighter_icon_type_on_gutter" : "dot"
 }
 
