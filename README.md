@@ -34,6 +34,7 @@ Options
 *	`"cursor_word_highlighter_icon_type_on_gutter" : dot`
 
 	4 valid types: dot, circle, bookmark and cross.
+
 Thanks
 -------
 Official `WordHighlight` plugin seems to do the similar job, but I couldn't get it work on mine, neither ST2 nor ST3, so I read its code and make this plugin, so you might also wanna check [WordHighlight][1]
