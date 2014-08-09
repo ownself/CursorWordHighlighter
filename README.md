@@ -39,6 +39,7 @@ Options
 Thanks
 -------
 Official `WordHighlight` plugin seems to do the similar job, but I couldn't get it work on mine, neither ST2 nor ST3, so I read its code and make this plugin, so you might also wanna check [WordHighlight][2], and the idea of persistent highlight came from [HighlightWords][3], even some bit of code from his project, thanks [Sean Liang][4].
+Actually all what I've done is combining 2 plugins together in my preferable way.
 
 I also wrote a [blog][5] for this, but it's in Chinese, check it out if you are interested~:)
 
