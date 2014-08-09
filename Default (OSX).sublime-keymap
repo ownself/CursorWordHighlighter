@@ -1,0 +1,4 @@
+[
+    { "keys": ["alt+enter"], "command": "persistent_highlight_words"},
+    { "keys": ["shift+alt+enter"], "command": "persistent_unhighlight_words"}
+]
