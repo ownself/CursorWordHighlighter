@@ -127,8 +127,6 @@ class PersistentHighlightWordsCommand(sublime_plugin.WindowCommand):
             cursor_word = view.substr(view.word(region)).strip()
             if cursor_word:
                 if cursor_word in word_list:
-                    print(cursor_word)
-                    print(word_list)
                     word_list.remove(cursor_word)
                 else:
                     word_list.append(cursor_word)
@@ -150,7 +148,7 @@ class PersistentHighlightWordsCommand(sublime_plugin.WindowCommand):
             search = r'(?<!\w)'+word+r'(?!\w)'
             regions = view.find_all(search, search_flags)
             highlightName = 'cursor_word_highlighter_persistant_highlight_word_%d' % size
-            view.add_regions(highlightName, regions, color_highlight_scopes[size % len(color_highlight_scopes)] , '', sublime.DRAW_NO_OUTLINE)
+            view.add_regions(highlightName, regions, color_highlight_scopes[size % len(color_highlight_scopes)] , '', sublime.DRAW_SOLID_UNDERLINE)
             size += 1
         view.settings().set('cursor_word_highlighter_persistant_highlight_size', size)
         view.settings().set('cursor_word_highlighter_persistant_highlight_text', text)
@@ -161,7 +159,6 @@ class PersistentUnhighlightWordsCommand(sublime_plugin.WindowCommand):
         if not view:
             return
         size = view.settings().get('cursor_word_highlighter_persistant_highlight_size', 0)
-        print(size)
         for i in range(size):
             view.erase_regions('cursor_word_highlighter_persistant_highlight_word_%d' % i)
         view.settings().set('cursor_word_highlighter_persistant_highlight_size', 0)
