@@ -2,8 +2,8 @@ CursorWordHighlighter
 =====================
 
 A Word Highlighter plug-in for Sublime Text 3
-![CursorWordHighlighter][1]
 
+![CursorWordHighlighter][1]
 What it does
 ------------
 With this plugin you will have automatically word highlighted with cursor, you don't need any hotkey and it works on Vim mode, non-Vim mode and mouse selecting. It also supports persistent keyword highlight with hotkey assigned(By default `Alt+Enter` to highlight/unhighlight and `Alt+Shift+Enter` to unhighlight all).
