@@ -7,6 +7,7 @@ settings = {}
 word_separators = ''
 highlighter_enabled = True
 case_sensitive = True
+whole_word = True
 draw_outline = True
 color_scope = 'comment'
 highlight_on_gutter = False
@@ -20,13 +21,14 @@ def plugin_loaded():
     get_settings().add_on_change('Preferences-reload', get_settings)
 
 def get_settings():
-    global settings, highlighter_enabled, case_sensitive, draw_outline, color_scope
+    global settings, highlighter_enabled, case_sensitive, whole_word, draw_outline, color_scope
     global highlight_on_gutter, gutter_icon_type, search_flags, draw_flags, word_separators
 
     settings = sublime.load_settings('Preferences.sublime-settings')
     word_separators = settings.get('word_separators')
     highlighter_enabled = bool(settings.get('cursor_word_highlighter_enabled', True))
     case_sensitive = bool(settings.get('cursor_word_highlighter_case_sensitive', True))
+    whole_word = bool(settings.get('cursor_word_highlighter_whole_word', True))
     draw_outline = bool(settings.get('cursor_word_highlighter_draw_outlined', True))
     color_scope = settings.get('cursor_word_highlighter_color_scope_name', 'comment')
     highlight_on_gutter = bool(settings.get('cursor_word_highlighter_mark_occurrences_on_gutter', False))
@@ -93,7 +95,10 @@ class CursorWordHighlighterListener(sublime_plugin.EventListener):
                 view.erase_status("CursorWordHighlighter")
 
     def find_regions(self, view, regions, string, limited_size):
-        search = r'(?<!\w)'+string+r'(?!\w)'
+        if not whole_word :
+            search = string
+        else :
+            search = r'(?<!\w)'+string+r'(?!\w)'
         if not limited_size:
             regions = view.find_all(search, search_flags)
         else:
@@ -123,8 +128,12 @@ class PersistentHighlightWordsCommand(sublime_plugin.WindowCommand):
         if not view:
             return
         word_list = self.get_words(view.settings().get('cursor_word_highlighter_persistant_highlight_text', ''))
+        cursor_word = ""
         for region in view.sel():
-            cursor_word = view.substr(view.word(region)).strip()
+            if region.empty() :
+                cursor_word = view.substr(view.word(region)).strip()
+            else :
+                cursor_word = view.substr(region).strip()
             if cursor_word:
                 if cursor_word in word_list:
                     word_list.remove(cursor_word)
@@ -145,7 +154,10 @@ class PersistentHighlightWordsCommand(sublime_plugin.WindowCommand):
             if len(word) < 2 or word in word_set:
                 continue
             word_set.add(word)
-            search = r'(?<!\w)'+word+r'(?!\w)'
+            if not whole_word :
+                search = word
+            else :
+                search = r'(?<!\w)'+word+r'(?!\w)'
             regions = view.find_all(search, search_flags)
             highlightName = 'cursor_word_highlighter_persistant_highlight_word_%d' % size
             view.add_regions(highlightName, regions, color_highlight_scopes[size % len(color_highlight_scopes)] , '', sublime.DRAW_SOLID_UNDERLINE)
