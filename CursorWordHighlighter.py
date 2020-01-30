@@ -151,7 +151,7 @@ class PersistentHighlightWordsCommand(sublime_plugin.WindowCommand):
         size = 0
         word_set = set()
         for word in words:
-            if len(word) < 2 or word in word_set:
+            if len(word) < 1 or word in word_set:
                 continue
             word_set.add(word)
             if not whole_word :
